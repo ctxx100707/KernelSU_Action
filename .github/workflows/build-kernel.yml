@@ -237,7 +237,6 @@ jobs:
         if [ ${{ env.DISABLE_CC_WERROR }} = true ]; then
             echo "CONFIG_CC_WERROR=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
         fi
-        echo "CONFIG_VDSO32=n" >> arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}
 
     - name: Setup ccache
       if: env.ENABLE_CCACHE == 'true'
@@ -248,6 +247,7 @@ jobs:
 
     - name: Build kernel
       run: |
+        make -j$(nproc --all) CC=clang O=out ARCH=${{ env.ARCH }} ...
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
         export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$PATH
         export KBUILD_BUILD_HOST=Github-Action
